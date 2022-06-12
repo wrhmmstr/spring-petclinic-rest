@@ -62,7 +62,8 @@ class OwnerController {
 		return ownerId == null ? new Owner() : this.owners.findById(ownerId);
 	}
 
-	@GetMapping("/owners/new")
+	// Disabled for REST API
+	// @GetMapping("/owners/new")
 	public String initCreationForm(Map<String, Object> model) {
 		Owner owner = new Owner();
 		model.put("owner", owner);
@@ -76,7 +77,8 @@ class OwnerController {
 		return owner;
 	}
 
-	@GetMapping("/owners/find")
+	// Disabled for REST API
+	// @GetMapping("/owners/find")
 	public String initFindForm(Map<String, Object> model) {
 		model.put("owner", new Owner());
 		return "owners/findOwners";
@@ -112,14 +114,15 @@ class OwnerController {
 
 	}
 
-	@GetMapping("/owners/{ownerId}/edit")
+	// Disabled for REST API
+	// @GetMapping("/owners/{ownerId}/edit")
 	public String initUpdateOwnerForm(@PathVariable("ownerId") int ownerId, Model model) {
 		Owner owner = this.owners.findById(ownerId);
 		model.addAttribute(owner);
 		return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
 	}
 
-	@PostMapping("/owners/{ownerId}")
+	@PostMapping("/owners/{ownerId}") // TODO
 	@ResponseStatus(HttpStatus.CREATED)
 	public @ResponseBody Owner processUpdateOwnerForm(@Valid @RequestBody Owner owner,
 			@PathVariable("ownerId") int ownerId) {

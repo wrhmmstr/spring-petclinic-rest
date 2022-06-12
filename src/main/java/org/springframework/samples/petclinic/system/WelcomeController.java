@@ -22,7 +22,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 class WelcomeController {
 
-	@GetMapping("/")
+	// Disabled for REST API
+	// @GetMapping("/")
 	public String welcome() {
 		return "welcome";
 	}

@@ -15,6 +15,7 @@
  */
 package org.springframework.samples.petclinic.owner;
 
+import java.util.Collection;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -67,17 +68,17 @@ class VisitController {
 
 	// Spring MVC calls method loadPetWithVisit(...) before initNewVisitForm is
 	// called
-	@GetMapping("/owners/{ownerId}/pets/{petId}/visits/new")
-	public String initNewVisitForm(@PathVariable("petId") int petId, Map<String, Object> model) {
-		return "pets/createOrUpdateVisitForm";
+	@GetMapping("/owners/{ownerId}/pets/{petId}/visits") // TODO
+	public @ResponseBody Collection<Visit> initNewVisitForm(@PathVariable int ownerId, @PathVariable int petId) {
+		return owners.findById(ownerId).getPet(petId).getVisits();
 	}
 
 	// Spring MVC calls method loadPetWithVisit(...) before processNewVisitForm is
 	// called
-	@PostMapping("/owners/{ownerId}/pets/{petId}/visits")
+	@PostMapping("/owners/{ownerId}/pets/{petId}/visits") // TODO
 	@ResponseStatus(HttpStatus.CREATED)
 	public @ResponseBody Owner processNewVisitForm(@PathVariable int ownerId, @PathVariable int petId,
-			@RequestBody @Valid Visit visit) {
+			@Valid @RequestBody Visit visit) {
 		Owner owner = owners.findById(ownerId);
 		owner.addVisit(petId, visit);
 		this.owners.save(owner);

@@ -1,0 +1,29 @@
+version: "2.2"
+
+services:
+  backend:
+    image: tinkoff-edu-app:1.0.0
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    networks:
+      app:
+    environment:
+      SPRING_PROFILES_ACTIVE: postgres
+      POSTGRES_URL: 'jdbc:postgresql://db/petclinic'
+
+  db:
+    image: postgres:14.3-alpine
+    ports:
+      - "5432:5432"
+    networks:
+      app:
+    environment:
+      POSTGRES_DB: petclinic
+      POSTGRES_USER: petclinic
+      POSTGRES_PASSWORD: petclinic
+
+networks:
+  app:

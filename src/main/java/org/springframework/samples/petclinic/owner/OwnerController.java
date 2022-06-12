@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
+import javax.validation.constraints.PositiveOrZero;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -133,7 +134,7 @@ class OwnerController {
 	 * @return a ModelMap with the model attributes for the view
 	 */
 	@GetMapping("/owners/{ownerId}")
-	public @ResponseBody Owner showOwner(@PathVariable("ownerId") int ownerId) {
+	public @ResponseBody Owner showOwner(@PathVariable @PositiveOrZero int ownerId) {
 		return owners.findById(ownerId);
 	}
 

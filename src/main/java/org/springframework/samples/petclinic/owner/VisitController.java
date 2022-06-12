@@ -19,14 +19,11 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Juergen Hoeller
@@ -77,17 +74,14 @@ class VisitController {
 
 	// Spring MVC calls method loadPetWithVisit(...) before processNewVisitForm is
 	// called
-	@PostMapping("/owners/{ownerId}/pets/{petId}/visits/new")
-	public String processNewVisitForm(@ModelAttribute Owner owner, @PathVariable int petId, @Valid Visit visit,
-			BindingResult result) {
-		if (result.hasErrors()) {
-			return "pets/createOrUpdateVisitForm";
-		}
-		else {
-			owner.addVisit(petId, visit);
-			this.owners.save(owner);
-			return "redirect:/owners/{ownerId}";
-		}
+	@PostMapping("/owners/{ownerId}/pets/{petId}/visits")
+	@ResponseStatus(HttpStatus.CREATED)
+	public @ResponseBody Owner processNewVisitForm(@PathVariable int ownerId, @PathVariable int petId,
+			@RequestBody @Valid Visit visit) {
+		Owner owner = owners.findById(ownerId);
+		owner.addVisit(petId, visit);
+		this.owners.save(owner);
+		return owner;
 	}
 
 }

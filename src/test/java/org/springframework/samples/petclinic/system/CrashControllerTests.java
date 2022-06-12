@@ -21,7 +21,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.util.NestedServletException;
 
+import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -40,9 +47,10 @@ class CrashControllerTests {
 
 	@Test
 	void testTriggerException() throws Exception {
-		mockMvc.perform(get("/oups")).andExpect(view().name("exception"))
-				.andExpect(model().attributeExists("exception")).andExpect(forwardedUrl("exception"))
-				.andExpect(status().isOk());
+		Exception wrappedException = assertThrows(NestedServletException.class, () -> mockMvc.perform(get("/oups")));
+
+		assertThat(wrappedException.getCause(), allOf(instanceOf(RuntimeException.class), hasProperty("message",
+				is("Expected: controller used to showcase what happens when an exception is thrown"))));
 	}
 
 }

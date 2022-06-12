@@ -16,7 +16,7 @@ cd spring-petclinic
 java -jar target/*.jar
 ```
 
-You can then access petclinic here: http://localhost:8080/
+You can then access petclinic API here: [http://localhost:8080/swagger-ui/](http://localhost:8080/swagger-ui/)
 
 <img width="1042" alt="petclinic-screenshot" src="https://cloud.githubusercontent.com/assets/838318/19727082/2aee6d6c-9b8e-11e6-81fe-e889a5ddfded.png">
 

@@ -55,10 +55,15 @@ c tinkoff-edu-app:1.0.0
 docker run --detach --publish 5432:5432 --env POSTGRES_DB=petclinic --env POSTGRES_USER=petclinic --env POSTGRES_PASSWORD=petclini
 c postgres:14.3-alpine
 ```
+Или запустить образы через docker compose:
+```
+ docker-compose -f docker-compose-postgres.yml up --detach=
+```
 Настроить подключение к БД:
 ```
 jdbc:postgresql://localhost:5432/petclinic
 ```
+
 
 ## In case you find a bug/suggested improvement for Spring Petclinic
 Our issue tracker is available here: https://github.com/spring-projects/spring-petclinic/issues

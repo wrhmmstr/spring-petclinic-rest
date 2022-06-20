@@ -37,6 +37,28 @@ There is no `Dockerfile` in this project. You can build a container image (if yo
 ```
 ./mvnw spring-boot:build-image
 ```
+Собрать приложение:
+```
+mvn clean verify
+```
+Собрать образ бэкэнда:
+```
+docker buildx build --tag tinkoff-edu-app:1.0.0
+```
+Запустить собранный образ:
+```
+docker run --detach --publish 8080:8080 --env POSTGRES_DB=petclinic --env POSTGRES_USER=petclinic --env POSTGRES_PASSWORD=petclini
+c tinkoff-edu-app:1.0.0
+```
+Запустить образ БД:
+```
+docker run --detach --publish 5432:5432 --env POSTGRES_DB=petclinic --env POSTGRES_USER=petclinic --env POSTGRES_PASSWORD=petclini
+c postgres:14.3-alpine
+```
+Настроить подключение к БД:
+```
+jdbc:postgresql://localhost:5432/petclinic
+```
 
 ## In case you find a bug/suggested improvement for Spring Petclinic
 Our issue tracker is available here: https://github.com/spring-projects/spring-petclinic/issues

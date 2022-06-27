@@ -2,6 +2,7 @@ package org.springframework.samples.petclinic.restAssured.pet;
 
 import io.restassured.RestAssured;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -21,22 +22,22 @@ public class GetOwnerIdPetsTest {
 	static List<Integer> ownerIds = new ArrayList<>();
 	static List<Integer> petIds = new ArrayList<>();
 
-//	@BeforeAll
-//	public static void connect() throws SQLException {
-//		RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
-//		connection = DriverManager.getConnection(
-//			"jdbc:postgresql://localhost:5432/petclinic",
-//			"petclinic",
-//			"petclinic"
-//		);
-//	}
+	@BeforeAll
+	public static void connect() throws SQLException {
+		RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+		connection = DriverManager.getConnection(
+			"jdbc:postgresql://localhost:5432/petclinic",
+			"petclinic",
+			"petclinic"
+		);
+	}
 
-//	@AfterAll
-//	public static void deleteTestData() throws SQLException {
-//		deleteTestOwnersFromDb(ownerIds);
-//		deleteTestPetsFromDb(petIds);
-//		connection.close();
-//	}
+	@AfterAll
+	public static void deleteTestData() throws SQLException {
+		deleteTestOwnersFromDb(ownerIds);
+		deleteTestPetsFromDb(petIds);
+		connection.close();
+	}
 
 	private static void deleteTestOwnersFromDb(List<Integer> ownerIds) throws SQLException {
 		for (int id : ownerIds) {
@@ -95,11 +96,28 @@ public class GetOwnerIdPetsTest {
 	@DisplayName("Проверка ответа при отправке запроса с несуществующим ownerId")
 	public void shouldErrorWithNonExistOwnerId() {
 		given()
-//			.contentType("*/*")
-			.pathParam("ownerId", Integer.parseInt(RandomStringUtils.randomAlphanumeric(4)))
+			.contentType("*/*")
+			.pathParam("ownerId", Integer.parseInt(RandomStringUtils.randomNumeric(4)))
 			.when()
 			.get("/owners/{ownerId}/pets")
 			.then()
-			.statusCode(401);
+			.statusCode(400);
+	}
+
+	@Test
+	@DisplayName("Проверка ответа при отправке запроса с существующим ownerId")
+	public void shouldOkWithExistOwnerId() throws SQLException {
+		Integer ownerId = createOwner();
+		Integer petId1 = createPet();
+//		Integer petId2 = createPet();
+		given()
+				.contentType("*/*")
+				.pathParam("ownerId", ownerId+1)
+				.when()
+				.get("/owners/{ownerId}/pets")
+				.then()
+				.statusCode(200)
+				.body("[0].id", Matchers.is(petId1),
+						"[0].name");
 	}
 }

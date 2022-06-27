@@ -1,5 +1,4 @@
 package org.springframework.samples.petclinic.restAssured.crash;
-
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
